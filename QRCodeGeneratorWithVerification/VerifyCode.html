@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://bitwiseshiftleft.github.com/sjcl/sjcl.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+        <script>
+        function VerifyCode(){
+            try{
+            var inputVal = document.getElementById("code").value;
+            inputVal = inputVal.split("Data123456789=")[1]
+            inputVal = inputVal.split("95652364562315")
+            console.log(inputVal)
+            try{
+                sjcl.decrypt("TestPassword", JSON.stringify({"iv":inputVal[0],"v":1,"iter":1000,"ks":128,"ts":64,"mode":"ccm","adata":"","cipher":"aes","salt":"VGVzdFBhc3N3b3Jk","ct":inputVal[1]}))
+                document.getElementById("PassOrFail").innerText = "Code Verified!"
+            }
+            catch{
+                document.getElementById("PassOrFail").innerText = "FAIL"
+            }
+            }
+            catch{
+                document.getElementById("PassOrFail").innerText = "FAIL"
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <div id="PassOrFail"></div>
+        <div>
+            <input type="text" id="code">
+        </div>
+        <button onclick="VerifyCode()">
+            Verify Code
+        </button>
+    </body>
+    <script>
+    document.getElementById("code").value = window.location.href;
+    </script>
+</html>

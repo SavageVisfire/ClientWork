@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://bitwiseshiftleft.github.com/sjcl/sjcl.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+        <script>
+        function CreateCode(){
+            num = Math.random()*10000000;
+            console.log(num)
+            var salt = btoa("TestPassword");
+            var options = {mode:"ccm",iter:1000,ks:128,ts:64,v:1,cipher:"aes",adata:"",salt:salt}
+            code = sjcl.encrypt("TestPassword", num.toString(),options)
+            //console.log(code)
+            code1 = JSON.parse(code).ct
+            code2 = JSON.parse(code).iv
+            //console.log(`${code2} + ${code1}`)
+            //console.log("DATA: "+ JSON.parse(DataToSend))
+            //console.log(sjcl.decrypt("TestPassword", code))
+            var canvas = document.querySelector('canvas');
+            var qr = new QRious({
+            element: canvas,
+            value: `LinkToWebpage.com?Data123456789=${code2}95652364562315${code1}`
+            });
+            qr === canvas.qrious;
+            document.getElementById("QRCODEDATA").innerText = `LinkToWebpage.com?Data123456789=${code2}95652364562315${code1}`
+            document.getElementById("QRCODEDATA").href = `./VerifyCode.html?Data123456789=${code2}95652364562315${code1}`
+        }
+        </script>
+    </head>
+    <body>
+        <button onclick="CreateCode()">
+            Generate Code
+        </button>
+    <canvas>
+
+    </canvas>
+    <div>
+        <a href=""id="QRCODEDATA"></a>
+    </div>
+    </body>
+</html>
